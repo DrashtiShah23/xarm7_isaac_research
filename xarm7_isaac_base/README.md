@@ -36,6 +36,18 @@ github_repos stores cloned external repositories.
 
 experiments stores logs and results.
 
+## Fake Meta Quest pipeline
+
+Use fake UDP packets to verify the Quest receiver, logger, and Isaac marker mapping before connecting a real Quest headset.
+
+```powershell
+python scripts\quest\quest_udp_receiver.py
+python scripts\quest\fake_meta_quest_stream.py
+python scripts\quest\view_latest_quest_data.py
+```
+
+See `docs/fake_meta_quest_pipeline.md` for full instructions.
+
 ## Official repositories to clone manually
 
 https://github.com/xArm-Developer/xarm_ros2

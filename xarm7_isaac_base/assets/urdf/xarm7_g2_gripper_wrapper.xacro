@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<robot name="xarm7_g2_gripper" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="is_ros2" value="false"/>
+  <xacro:property name="add_gripper" value="true"/>
+  <xacro:property name="add_bio_gripper" value="false"/>
+  <xacro:property name="gripper_version" value="G2"/>
+
+  <xacro:include filename="xarm7_robot_macro_windows.xacro"/>
+
+  <xacro:xarm7_robot
+    prefix=""
+    hw_ns="xarm"
+    limited="true"
+    velocity_control="false"
+    add_gripper="${add_gripper}"
+    add_bio_gripper="${add_bio_gripper}"
+    ros2_control_plugin="uf_robot_hardware/UFRobotSystemHardware"
+    robot_ip=""
+    report_type="normal"
+    baud_checkset="true"
+    default_gripper_baud="2000000"
+    model_num="0"
+    inertial_params_filename=""
+    kinematics_params_filename=""
+    hard_interface="PositionJointInterface"
+  />
+
+  <link name="link_eef"/>
+  <joint name="joint_eef" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="link7"/>
+    <child link="link_eef"/>
+  </joint>
+
+  <xacro:include filename="../../github_repos/xarm_ros2/xarm_description/urdf/gripper/xarm_gripper.urdf.xacro"/>
+  <xacro:include filename="../../github_repos/xarm_ros2/xarm_description/urdf/gripper/xarm_gripper.transmission.xacro"/>
+  <xacro:include filename="../../github_repos/xarm_ros2/xarm_description/urdf/gripper/xarm_gripper.gazebo.xacro"/>
+
+  <!-- G2 meshes are provided as DAE files in the official xarm_description tree. -->
+  <xacro:property name="mesh_suffix" value="dae"/>
+
+  <xacro:if value="${add_gripper and not add_bio_gripper}">
+    <xacro:xarm_gripper_urdf
+      prefix=""
+      attach_to="link_eef"
+      attach_xyz="0 0 0"
+      attach_rpy="0 0 0"
+      gripper_version="${gripper_version}"
+    />
+    <xacro:xarm_gripper_transmission
+      prefix=""
+      hard_interface="PositionJointInterface"
+    />
+    <xacro:xarm_gripper_gazebo prefix=""/>
+  </xacro:if>
+
+</robot>
